@@ -40,11 +40,7 @@ with st.sidebar:
     fcvc = (fcvc_week / 7) * 2 + 1 # Converte escala 0-7 para 1-3 do modelo
     
     ncp = st.slider("Número de refeições principais ao dia", 1, 4, 3)
-    
-    # Tradução Consumo entre refeições
-    caec_options = {"Nunca": "no", "Às vezes": "Sometimes", "Frequentemente": "Frequently", "Sempre": "Always"}
-    caec_pt = st.selectbox("Consome alimentos entre as refeições?", list(caec_options.keys()))
-    caec = caec_options[caec_pt]
+
     
     smoke_pt = st.radio("Fumante?", ["Sim", "Não"])
     smoke = "yes" if smoke_pt == "Sim" else "no"
