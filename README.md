@@ -40,4 +40,4 @@ Implementação da lógica de predição consumindo o modelo exportado.
 Hospedagem da aplicação no Streamlit Cloud para acesso via link público.
 
 📎 Links do Projeto
-Aplicação no Streamlit: https://tech-challenge-fase4-xyb5gbclmc8hphrn66vnqg.streamlit.app/
+Aplicação no Streamlit: https://tech-challenge-fase4-xyb5gbclmc8hphrn66vnqg.streamlit.app/](https://tech-challenge-fase4-xyb5gbclmc8hphrn66vnqg.streamlit.app/
