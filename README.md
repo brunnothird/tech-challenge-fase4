@@ -1,14 +1,8 @@
 🩺 Tech Challenge - Sistema de Apoio ao Diagnóstico de Obesidade
 Este projeto faz parte da Fase 4 do Tech Challenge da Pós-Graduação em Data Science, com foco em integrar análise exploratória, inteligência artificial e deploy de aplicações preditivas para o setor de saúde.
 
-
-
-
 🎯 Objetivo
 O objetivo principal foi desenvolver uma solução completa para auxiliar profissionais da saúde no diagnóstico rápido e preciso dos níveis de obesidade de pacientes. A solução combina um painel analítico para visão estratégica e um modelo de Machine Learning para suporte à decisão clínica em tempo real.
-
-
-
 
 🛠️ Tecnologias Utilizadas
 Análise de Dados: Python (Pandas, Numpy)
@@ -22,9 +16,6 @@ Interface Web: Streamlit
 IDE: VS Code
 
 Versionamento: Git & GitHub
-
-
-
 
 📈 Etapas do Projeto
 1. Análise Exploratória (EDA) no Power BI
@@ -47,9 +38,6 @@ Criação de uma aplicação web utilizando Streamlit para permitir a entrada de
 Implementação da lógica de predição consumindo o modelo exportado.
 
 Hospedagem da aplicação no Streamlit Cloud para acesso via link público.
-
-
-
 
 📎 Links do Projeto
 Aplicação no Streamlit: https://tech-challenge-fase4-xyb5gbclmc8hphrn66vnqg.streamlit.app/
