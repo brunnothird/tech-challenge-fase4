@@ -5,7 +5,7 @@ import pickle
 # Configuração da página
 st.set_page_config(page_title="Predição de Obesidade", layout="wide")
 
-# 1. Carregar o modelo que você baixou do Colab
+# 1. Carregar o modelo
 @st.cache_resource
 def load_model():
     with open('modelo_final.pkl', 'rb') as file:
@@ -14,31 +14,73 @@ def load_model():
 model = load_model()
 
 st.title("🩺 Sistema de Apoio ao Diagnóstico - Obesidade")
-st.markdown("Preencha os dados do paciente na barra lateral para realizar a predição.")
+st.markdown("Preencha os dados do paciente na barra lateral para realizar a predição baseada em IA.")
 
-# 2. Criar a interface de entrada na barra lateral
+# 2. Criar a interface de entrada na barra lateral (TRADUZIDA E CORRIGIDA)
 with st.sidebar:
     st.header("Dados do Paciente")
-    gender = st.selectbox("Gênero", ["Male", "Female"])
+    
+    # Tradução de Gênero
+    gender_pt = st.selectbox("Gênero", ["Masculino", "Feminino"])
+    gender = "Male" if gender_pt == "Masculino" else "Female"
+    
     age = st.slider("Idade", 14, 61, 25)
     height = st.number_input("Altura (m)", 1.40, 2.20, 1.70)
     weight = st.number_input("Peso (kg)", 30.0, 200.0, 70.0)
-    family_history = st.radio("Histórico Familiar de Sobrepeso?", ["yes", "no"])
-    favc = st.radio("Consome alimentos calóricos frequentemente?", ["yes", "no"])
-    fcvc = st.slider("Frequência de consumo de vegetais (1-3)", 1, 3, 2)
-    ncp = st.slider("Número de refeições principais", 1, 4, 3)
-    caec = st.selectbox("Consumo de alimentos entre refeições", ["no", "Sometimes", "Frequently", "Always"])
-    smoke = st.radio("Fumante?", ["yes", "no"])
-    ch2o = st.slider("Consumo de água diário (1-3)", 1, 3, 2)
-    scc = st.radio("Monitora o consumo de calorias?", ["yes", "no"])
-    faf = st.slider("Atividade física semanal (0-3)", 0, 3, 1)
-    tue = st.slider("Uso de dispositivos eletrônicos (0-2)", 0, 2, 1)
-    calc = st.selectbox("Consumo de álcool", ["no", "Sometimes", "Frequently", "Always"])
-    mtrans = st.selectbox("Meio de transporte habitual", ["Public_Transportation", "Walking", "Automobile", "Motorbike", "Bike"])
+    
+    # Tradução de Sim/Não
+    family_history_pt = st.radio("Histórico Familiar de Sobrepeso?", ["Sim", "Não"])
+    family_history = "yes" if family_history_pt == "Sim" else "no"
+    
+    favc_pt = st.radio("Consome alimentos calóricos frequentemente?", ["Sim", "Não"])
+    favc = "yes" if favc_pt == "Sim" else "no"
+    
+    # Ajuste: Vegetais por semana (Escala original era 1-3, ajustamos a proporção para 0-7)
+    fcvc_week = st.slider("Frequência de consumo de vegetais (Dias por semana)", 0, 7, 3)
+    fcvc = (fcvc_week / 7) * 2 + 1 # Converte escala 0-7 para 1-3 do modelo
+    
+    ncp = st.slider("Número de refeições principais ao dia", 1, 4, 3)
+    
+    # Tradução Consumo entre refeições
+    caec_options = {"Nunca": "no", "Às vezes": "Sometimes", "Frequentemente": "Frequently", "Sempre": "Always"}
+    caec_pt = st.selectbox("Consome alimentos entre as refeições?", list(caec_options.keys()))
+    caec = caec_options[caec_pt]
+    
+    smoke_pt = st.radio("Fumante?", ["Sim", "Não"])
+    smoke = "yes" if smoke_pt == "Sim" else "no"
+    
+    # Ajuste: Água em Litros (Escala original era 1-3, ajustamos 0-5 litros para essa faixa)
+    ch2o_litros = st.slider("Consumo de água diário (Litros)", 0.0, 5.0, 2.0)
+    ch2o = (ch2o_litros / 5) * 2 + 1 # Converte escala 0-5 para 1-3 do modelo
+    
+    scc_pt = st.radio("Monitora o consumo de calorias?", ["Sim", "Não"])
+    scc = "yes" if scc_pt == "Sim" else "no"
+    
+    # Ajuste: Atividade física semanal de 0 a 7
+    faf_days = st.slider("Atividade física semanal (Dias por semana)", 0, 7, 2)
+    faf = (faf_days / 7) * 3 # Converte escala 0-7 para 0-3 do modelo
+    
+    # Pergunta de eletrônicos removida conforme solicitado (TUE será enviado como 1 fixo para não quebrar o modelo)
+    tue = 1.0 
+    
+    # Tradução Álcool
+    calc_options = {"Não consome": "no", "Às vezes": "Sometimes", "Frequentemente": "Frequently", "Sempre": "Always"}
+    calc_pt = st.selectbox("Consumo de álcool", list(calc_options.keys()))
+    calc = calc_options[calc_pt]
+    
+    # Tradução Transporte
+    mtrans_options = {
+        "Transporte Público": "Public_Transportation",
+        "Caminhada": "Walking",
+        "Automóvel": "Automobile",
+        "Motocicleta": "Motorbike",
+        "Bicicleta": "Bike"
+    }
+    mtrans_pt = st.selectbox("Meio de transporte habitual", list(mtrans_options.keys()))
+    mtrans = mtrans_options[mtrans_pt]
 
-# 3. Processar os dados e realizar a previsão
+# 3. Processar e Prever
 if st.button("Realizar Diagnóstico"):
-    # Criar DataFrame com as entradas
     input_dict = {
         'Age': age, 'Height': height, 'Weight': weight, 'FCVC': fcvc,
         'NCP': ncp, 'CH2O': ch2o, 'FAF': faf, 'TUE': tue,
@@ -61,17 +103,15 @@ if st.button("Realizar Diagnóstico"):
     
     input_df = pd.DataFrame([input_dict])
 
-    # Ajustar colunas para o modelo
     for col in model.feature_names_in_:
         if col not in input_df.columns:
             input_df[col] = 0
     input_df = input_df[model.feature_names_in_]
 
-    # Prever
     res = model.predict(input_df)[0]
     
-    # Mapeamento do resultado
     labels = ["Peso Insuficiente", "Peso Normal", "Obesidade Tipo I", "Obesidade Tipo II", "Obesidade Tipo III", "Sobrepeso Nível I", "Sobrepeso Nível II"]
     
     st.subheader("Resultado do Diagnóstico:")
-    st.header(f"➡️ {labels[res]}")
+    st.success(f"O paciente foi classificado com: **{labels[res]}**")
+    
