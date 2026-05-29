@@ -60,9 +60,9 @@ with st.sidebar:
     tue = 1.0 
     
     # Tradução Álcool
-    calc_options = {"Não consome": "no", "Às vezes": "Sometimes", "Frequentemente": "Frequently", "Sempre": "Always"}
-    calc_pt = st.selectbox("Consumo de álcool", list(calc_options.keys()))
-    calc = calc_options[calc_pt]
+    caec_options = {"Não consome": "no", "Às vezes": "Sometimes", "Frequentemente": "Frequently", "Sempre": "Always"}
+    caec_pt = st.selectbox("Consome alimentos entre as refeições?", list(caec_options.keys()))
+    caec = caec_options[caec_pt]
     
     # Tradução Transporte
     mtrans_options = {
