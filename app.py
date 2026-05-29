@@ -40,7 +40,6 @@ with st.sidebar:
     fcvc = (fcvc_week / 7) * 2 + 1 # Converte escala 0-7 para 1-3 do modelo
     
     ncp = st.slider("Número de refeições principais ao dia", 1, 4, 3)
-
     
     smoke_pt = st.radio("Fumante?", ["Sim", "Não"])
     smoke = "yes" if smoke_pt == "Sim" else "no"
@@ -59,7 +58,12 @@ with st.sidebar:
     # Pergunta de eletrônicos removida conforme solicitado (TUE será enviado como 1 fixo para não quebrar o modelo)
     tue = 1.0 
     
-    # Tradução Álcool
+    # 📌 BLOCO DE ÁLCOOL RECOLOCADO AQUI:
+    calc_options = {"Não consome": "no", "Às vezes": "Sometimes", "Frequentemente": "Frequently", "Sempre": "Always"}
+    calc_pt = st.selectbox("Consumo de álcool", list(calc_options.keys()))
+    calc = calc_options[calc_pt]
+    
+    # 📌 BLOCO DE ALIMENTOS ENTRE REFEIÇÕES MANTIDO AQUI:
     caec_options = {"Não consome": "no", "Às vezes": "Sometimes", "Frequentemente": "Frequently", "Sempre": "Always"}
     caec_pt = st.selectbox("Consome alimentos entre as refeições?", list(caec_options.keys()))
     caec = caec_options[caec_pt]
@@ -110,4 +114,3 @@ if st.button("Realizar Diagnóstico"):
     
     st.subheader("Resultado do Diagnóstico:")
     st.success(f"O paciente foi classificado com: **{labels[res]}**")
-    
